@@ -1,4 +1,5 @@
 import * as THREE from './three.module.js'
+import { VRButton } from './webxr/VRButton.js'
 
 console.log("hey world from app.js in webstorm");
 
@@ -18,6 +19,9 @@ renderer.setSize(window.innerWidth,window.innerHeight);
 //create canvas element with renderer settings
 document.body.appendChild(renderer.domElement);
 
+//create VR button
+document.body.appendChild(VRButton.createButton(renderer));
+renderer.xr.enabled = true;
 
 //make canvas resize actively with window
 window.addEventListener('resize', () => {
@@ -57,11 +61,11 @@ scene.add(light);
 
 //render scene (gets called 60 fps)
 var render = function(){
-	requestAnimationFrame(render);	//makes sure browser window is active
+	//requestAnimationFrame(render);	//makes sure browser window is active
 
 	mesh.rotation.x += 0.01;
-
 	renderer.render(scene, camera);
 }
 
-render();
+//render();
+renderer.setAnimationLoop(render);
