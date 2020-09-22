@@ -63,7 +63,7 @@ scene.add(light);
 var render = function(){
 	//requestAnimationFrame(render);	//makes sure browser window is active
 
-	mesh.rotation.x += 0.01;
+	//mesh.rotation.x += 0.01;
 	renderer.render(scene, camera);
 }
 
