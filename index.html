@@ -1,15 +1,250 @@
-<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Hello World</title>
-    <link rel="stylesheet" href="css/main.css">
-
-    <script type="module" src='./js/app.js'></script>
-</head> 
+    <title>Hello World from Aframe!</title>
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+    <script src="//unpkg.com/aframe-csg-meshs@1.0.0/index.js"></script>
+</head>
 <body>
+<a-scene renderer="colorManagement: true">
+    <a-assets>
+        <!-- Images -->
+        <img id="tv_still" src="zoom.jpg">
+        <img id="coffeewood" src="wood1.jpg">
+        <img id="concretewall" src="concrete.jpg">
+        <img id="concretefloor" src="concrete_dark.jpg">
+        <img id="concreteroof" src="concrete_holes.jpg">
+        <img id="sky_img" src="night.jpg">
+        <img id="masksign" src="mask_sign.png">
+        <img id="socialdist" src="social_distancing.jpg">
+        <a-asset-item id="couch" src="./models/couch/scene.gltf"></a-asset-item>
+        <a-asset-item id="lightfixture" src="./models/light_fixture/scene.gltf"></a-asset-item>
+        <a-asset-item id="book" src="./models/book/scene.gltf"></a-asset-item>
+        <a-asset-item id="monitor" src="./models/desktop_computer/scene.gltf"></a-asset-item>
+        <a-asset-item id="chair" src="./models/chair/scene.gltf"></a-asset-item>
+        <a-asset-item id="picframe" src="./models/picture_frame/scene.gltf"></a-asset-item>
 
+        <!-- Mixins -->
+        <a-mixin id="wall"
+                 geometry="primitive: box; height: 4; width: 10; depth: 0.25;"
+                 material="src: #concretewall; repeat: 6 3; roughness: 1; metalness: 0; normalTextureRepeat: 6 3; normalScale: 2 2;">
+        </a-mixin>
+
+        <a-mixin id="window"
+                 geometry="primitive: box; height: 2; width: 2; depth: 0.25;"
+                 material="color: lightblue; opacity: 0.2; roughness: 0;">
+        </a-mixin>
+
+        <a-mixin id="light"
+                 geometry="primitive: sphere; radius: 0.4"
+                 material="color: #fff9f0; shader: flat"
+                 light="color: #e8c189; intensity: 0.8; distance: 35; decay: 5; type: point; castShadow: true">
+        </a-mixin>
+    </a-assets>
+
+    <!-- Walls  -->
+    <!-- Wall 1 -->
+    <a-entity id ="wall1" position="-5 2 0" rotation="0 90 0" static-body>
+        <a-entity mixin="wall" csg-meshs="subtract: .window;">
+
+            <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
+
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-1.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0.33 -0.175" rotation="0 0 90"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+            <a-entity class="window" mixin="window" position="2 0 0"></a-entity>
+
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="1.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0.33 -0.175" rotation="0 0 90"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+        </a-entity>
+    </a-entity>
+
+    <!-- Wall 2 -->
+    <a-entity id="wall2" position="0 2 -5" rotation="0 0 0" static-body>
+        <a-entity mixin="wall"></a-entity>
+    </a-entity>
+
+    <!-- Wall 3 -->
+    <a-entity id="wall3" position="5 2 0" rotation="0 -90 0" static-body>
+        <a-entity mixin="wall" csg-meshs="subtract: .window;">
+            <a-entity mixin="wall" csg-meshs="subtract: .window;">
+
+                <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
+
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-1.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0.33 -0.175" rotation="0 0 90"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+                <a-entity class="window" mixin="window" position="2 0 0"></a-entity>
+
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="1.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0.33 -0.175" rotation="0 0 90"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+            </a-entity>
+        </a-entity>
+    </a-entity>
+
+    <!-- Wall 4 -->
+    <a-entity id="wall4" position="0 2 5" rotation="0 180 0" static-body>
+        <a-entity mixin="wall" csg-meshs="subtract: .window;">
+
+            <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
+
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-1.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0.33 -0.175" rotation="0 0 90"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+            <a-entity class="window" mixin="window" position="2 0 0"></a-entity>
+
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="1.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2.5 0 -0.175"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0.33 -0.175" rotation="0 0 90"></a-entity>
+            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+        </a-entity>
+    </a-entity>
+
+
+    <!-- Poster -->
+    <a-image    src="#masksign"
+                rotation="0 -90 0"
+                position="4.873 2 -4"
+                width="1"
+                height="1.5">
+    </a-image>
+
+    <!-- TV -->
+    <a-box position="0 2.5 -4.82"
+           width = "4"
+           height = "2.25"
+           depth = "0.10"
+           color="#1f1f1f">
+        <a-image    src="#tv_still"
+                    light="color: #53A0FF; intensity: 0.4; decay: 100; type: point; castShadow: true"
+                    position = "0 0 0.06"
+                    width = "3.8"
+                    height = "2.1">
+        </a-image>
+    </a-box>
+
+    <!-- Standing Lamp -->
+    <a-cylinder position="4.25 0.025 4"
+                height="0.1"
+                radius=".4"
+                color="#000000">
+        <a-cylinder position="0 1.25 0"
+                    height="2.5"
+                    radius="0.025">
+            <a-entity mixin="light" position="0 1.65 0"></a-entity>
+        </a-cylinder>
+
+    </a-cylinder>
+
+    <!-- Desk -->
+    <a-box id="desk"
+           position="2 0.8 3.85"
+           rotation="-90 0 0"
+           width="3"
+           height="2"
+           depth="0.1"
+            src="#coffeewood">
+        <a-box  position="-1.425 0.925 -0.425"
+                width="0.15"
+                height="0.15"
+                depth="0.75"
+                color="#fff">
+        </a-box>
+        <a-box  position="1.425 0.925 -0.425"
+                width="0.15"
+                height="0.15"
+                depth="0.75"
+                color="#fff">
+        </a-box>
+        <a-box  position="-1.425 -0.925 -0.425"
+                width="0.15"
+                height="0.15"
+                depth="0.75"
+                color="#fff">
+        </a-box>
+        <a-box  position="1.425 -0.925 -0.425"
+                width="0.15"
+                height="0.15"
+                depth="0.75"
+                color="#fff">
+        </a-box>
+    </a-box>
+
+
+
+    <!-- Picture Frame -->
+    <a-entity gltf-model="#picframe" scale="0.02 0.02 0.02" rotation="0 90 90" position="-4.85 2 -0.75">
+        <a-image src="#socialdist"
+                 rotation="0 0 -90"
+                 position="0 38 0"
+                 width="1.21"
+                 height="1.82"
+                 material=""
+                 geometry=""
+                 scale="50 50 50">
+        </a-image>
+    </a-entity>
+
+    <!-- Chair -->
+    <a-entity gltf-model="#chair" id="desk-chair" scale="0.04 0.03 0.04" rotation="0 -133 0" position="2 1.1 2.6"></a-entity>
+
+    <!-- Couch -->
+    <a-entity gltf-model="#couch" light="type: point; intensity:0.1; color:white" material="color:#fff; shader:standard" scale="0.75 0.6 0.5" rotation="0 180 0" position="0 1.2 -0.7"></a-entity>
+
+    <!-- Ceiling light fixture -->
+    <a-entity gltf-model="#lightfixture" light="type: point; intensity: 0.75; distance: 20; decay:5" scale="1.5 1.7 1.5" position="0 2.5 -1.5"></a-entity>
+
+    <!-- Books -->
+    <a-entity gltf-model="#book" scale="0.003 0.003 0.003" rotation="0 204 0" position="3 0.88 4.3">
+        <a-entity gltf-model="#book" scale="1 1 1" rotation="0 -10 0" position="0 22 0"></a-entity>
+    </a-entity>
+
+    <!-- Computer -->
+    <a-entity gltf-model="#monitor" rotation="0 180 0" position="1.85 1.5 3.85"></a-entity>
+
+
+
+
+    <!-- Roof -->
+    <a-plane id="roof" position="0 4 0" rotation="90 0 0" width="10" height="10" src="#concreteroof" repeat="6 6"></a-plane>
+
+    <!-- Floor -->
+    <a-plane id="floor" position="0 0 0" rotation="-90 0 0" width="10" height="10" shadow="receive:true" src="#concretefloor"></a-plane>
+
+    <!-- Sky -->
+    <a-sky src="#sky_img"
+            radius="600"></a-sky>
+
+
+    <!-- Camera -->
+    <a-entity position="0 0 0">
+        <a-camera user-height="1.6"></a-camera>
+    </a-entity>
+
+
+
+
+    <!-- Ambient light -->
+    <a-entity light="type: ambient; color: #CCC; intensity: 0.1"></a-entity>
+
+</a-scene>
 </body>
 </html>
