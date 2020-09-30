@@ -3,6 +3,131 @@
     <title>Hello World from Aframe!</title>
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="//unpkg.com/aframe-csg-meshs@1.0.0/index.js"></script>
+
+    <script>
+        // for controlling on and off of covid mode
+        global_Covidmode = 1;
+        AFRAME.registerComponent('covidswitch', {
+            init: function() {
+                var pieces = document.getElementsByClassName('domino')
+
+                this.el.addEventListener('click', e => {
+                    for (let piece of pieces) {
+                        if(global_Covidmode == 1) {
+                            piece.emit('go');   //turn off covid mode
+                        }
+                        else{
+                            piece.emit('fold'); //turn on covid mode
+                        }
+                    }
+
+                    global_Covidmode = !global_Covidmode;
+
+                    if(global_Covidmode == 0)
+                    {
+                        document.querySelector('#skyimg').setAttribute('src', 'day.jpg');
+                        document.querySelector('#sunlight').setAttribute("light", {intensity: 2});
+                    }else{
+                        document.querySelector('#skyimg').setAttribute('src', 'night.jpg');
+                        document.querySelector('#sunlight').setAttribute("light", {intensity: 0});
+                    }
+
+
+                    console.log(global_Covidmode);
+                })
+            }
+        })
+    </script>
+
+
+    <script>
+        playing = 0;
+        AFRAME.registerComponent('musicremote', {
+            init: function () {
+                var pieces = document.getElementsByClassName('loud')
+
+                this.el.addEventListener('click', e => {
+                    for (let piece of pieces) {
+                        if (playing == 0) {
+                            piece.emit('playmusic');   //turn off covid mode
+                            playing = 1;
+                        } else {
+                            piece.components.sound.stopSound();
+                            playing = 0;
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+
+
+
+
+    <script>
+        // for controlling light intensity of lamp with light switch
+        AFRAME.registerComponent('lightswitch', {
+            init: function() {
+                //get all objects that are 'dimmable'
+                var sceneEl = this.el.sceneEl;
+                dimmables = sceneEl.querySelectorAll('.dimmable')
+
+                //if THIS lightswitch is clicked
+                this.el.addEventListener('click', e => {
+                    console.log("lightswitch was clicked!");
+
+                    //for every dimmable object, increase its light intensity
+                    for (var i = 0; i < dimmables.length; i++)
+                    {
+                        var curIntensity = dimmables[i].getAttribute("light").intensity;
+                        //console.log(curIntensity);
+                        if(curIntensity < 10) {
+                            dimmables[i].setAttribute("light", {intensity: curIntensity+3.5});
+                        }
+                        else{
+                            dimmables[i].setAttribute("light", {intensity: 0.8});
+                        }
+                    }
+                })
+            }
+        })
+    </script>
+
+    <script>
+        const colors = ['#e8c189', '#ff3030', '#ffffff', '#3075ff','#28bf37'];
+        colorIndex = 0;
+
+        // for controlling light color of lamp with cube as color switch
+        AFRAME.registerComponent('colorswitch', {
+            init: function() {
+                //get all objects that are 'dimmable'
+                var sceneEl = this.el.sceneEl;
+                dimmables = sceneEl.querySelectorAll('.dimmable')
+
+                //if THIS lightswitch is clicked
+                this.el.addEventListener('click', e => {
+                    console.log("colorswitch was clicked!");
+
+                    colorIndex++;
+                    if(colorIndex >= colors.length){
+                        colorIndex = 0;
+                    }
+
+                    //for every dimmable object, increase its color
+                    for (var i = 0; i < dimmables.length; i++)
+                    {
+                        //var curColor = dimmables[i].getAttribute("light").color;
+                        //console.log(curColor);
+
+                        dimmables[i].setAttribute("light", {color: colors[colorIndex]});
+                    }
+                })
+            }
+        })
+    </script>
+
+
+
 </head>
 <body>
 <a-scene renderer="colorManagement: true">
@@ -13,15 +138,25 @@
         <img id="concretewall" src="concrete.jpg">
         <img id="concretefloor" src="concrete_dark.jpg">
         <img id="concreteroof" src="concrete_holes.jpg">
-        <img id="sky_img" src="night.jpg">
+        <img id="night" src="night.jpg">
+        <img id="day" src="day.jpg">
         <img id="masksign" src="mask_sign.png">
         <img id="socialdist" src="social_distancing.jpg">
+        <img id="cat" src="hang_in_there.jpg">
+
+        <!-- Models -->
         <a-asset-item id="couch" src="./models/couch/scene.gltf"></a-asset-item>
         <a-asset-item id="lightfixture" src="./models/light_fixture/scene.gltf"></a-asset-item>
         <a-asset-item id="book" src="./models/book/scene.gltf"></a-asset-item>
         <a-asset-item id="monitor" src="./models/desktop_computer/scene.gltf"></a-asset-item>
         <a-asset-item id="chair" src="./models/chair/scene.gltf"></a-asset-item>
         <a-asset-item id="picframe" src="./models/picture_frame/scene.gltf"></a-asset-item>
+        <a-asset-item id="plant" src="./models/plant/scene.gltf"></a-asset-item>
+        <a-asset-item id="dog" src="./models/dog/scene.gltf"></a-asset-item>
+        <a-asset-item id="speakers" src="./models/speakers/scene.gltf"></a-asset-item>
+
+        <!-- Audio -->
+        <audio id="song" src="./audio/stockholm.mp3" preload="auto"></audio>
 
         <!-- Mixins -->
         <a-mixin id="wall"
@@ -43,36 +178,10 @@
 
     <!-- Walls  -->
     <!-- Wall 1 -->
-    <a-entity id ="wall1" position="-5 2 0" rotation="0 90 0" static-body>
-        <a-entity mixin="wall" csg-meshs="subtract: .window;">
-
-            <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
-
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-1.5 0 -0.175"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0 -0.175"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2.5 0 -0.175"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0.33 -0.175" rotation="0 0 90"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 -0.33 -0.175" rotation="0 0 90"></a-entity>
-
-            <a-entity class="window" mixin="window" position="2 0 0"></a-entity>
-
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="1.5 0 -0.175"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0 -0.175"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2.5 0 -0.175"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0.33 -0.175" rotation="0 0 90"></a-entity>
-            <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 -0.33 -0.175" rotation="0 0 90"></a-entity>
-
-        </a-entity>
-    </a-entity>
-
-    <!-- Wall 2 -->
-    <a-entity id="wall2" position="0 2 -5" rotation="0 0 0" static-body>
-        <a-entity mixin="wall"></a-entity>
-    </a-entity>
-
-    <!-- Wall 3 -->
-    <a-entity id="wall3" position="5 2 0" rotation="0 -90 0" static-body>
-        <a-entity mixin="wall" csg-meshs="subtract: .window;">
+    <a-entity position="-5 0 0"
+              animation__unfold="property: rotation; to: 0 0 90; dur: 1000; easing: linear; startEvents: go; delay: 0"
+              animation__fold="property: rotation; to: 0 0 0; dur: 6000; easing: linear; startEvents: fold;">
+        <a-entity id ="wall1" class="domino" position="-0.125 2 0" rotation="0 90 0" static-body>
             <a-entity mixin="wall" csg-meshs="subtract: .window;">
 
                 <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
@@ -95,8 +204,46 @@
         </a-entity>
     </a-entity>
 
+    <!-- Wall 2 -->
+    <a-entity position="0 0 -5" animation__unfold="property: rotation; to: -90 0 0; dur: 1000; easing: linear; startEvents: go; delay:0"
+              animation__fold="property: rotation; to: 0 0 0; dur: 6000; easing: linear; startEvents: fold;">
+        <a-entity id="wall2" class="domino" position="0 2 -0.125" rotation="0 0 0" static-body>
+            <a-entity mixin="wall"></a-entity>
+        </a-entity>
+    </a-entity>
+
+    <!-- Wall 3 -->
+    <a-entity position="5 0 0" animation__unfold="property: rotation; to: 0 0 -90; dur: 1000; easing: linear; startEvents: go; delay:0"
+              animation__fold="property: rotation; to: 0 0 0; dur: 6000; easing: linear; startEvents: fold;">
+        <a-entity id="wall3" class="domino" position="0.125 2 0" rotation="0 -90 0" static-body>
+        <a-entity mixin="wall" csg-meshs="subtract: .window;">
+            <a-entity mixin="wall" csg-meshs="subtract: .window;">
+
+                <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
+
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-1.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 0.33 -0.175" rotation="0 0 90"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="-2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+                <a-entity class="window" mixin="window" position="2 0 0"></a-entity>
+
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="1.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2.5 0 -0.175"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 0.33 -0.175" rotation="0 0 90"></a-entity>
+                <a-entity id = "bar" geometry="primitive: cylinder; height: 2.1; radius: 0.05;" material="color:#3d3d3d" position="2 -0.33 -0.175" rotation="0 0 90"></a-entity>
+
+            </a-entity>
+        </a-entity>
+    </a-entity>
+    </a-entity>
+
     <!-- Wall 4 -->
-    <a-entity id="wall4" position="0 2 5" rotation="0 180 0" static-body>
+    <a-entity position="0 0 5" animation__unfold="property: rotation; to: 90 0 0; dur: 1000; easing: linear; startEvents: go; delay:0"
+              animation__fold="property: rotation; to: 0 0 0; dur: 6000; easing: linear; startEvents: fold;">
+        <a-entity id="wall4" class="domino" position="0 2 0.125" rotation="0 180 0" static-body>
         <a-entity mixin="wall" csg-meshs="subtract: .window;">
 
             <a-entity class="window" mixin="window" position="-2 0 0"></a-entity>
@@ -117,14 +264,20 @@
 
         </a-entity>
     </a-entity>
+    </a-entity>
 
-
-    <!-- Poster -->
+    <!-- Mask metal sign -->
     <a-image    src="#masksign"
                 rotation="0 -90 0"
                 position="4.873 2 -4"
                 width="1"
                 height="1.5">
+    </a-image>
+
+    <!-- "Hang in there" poster -->
+    <a-image    src="#cat"
+                rotation="0 180 0"
+                position="0 2 4.85">
     </a-image>
 
     <!-- TV -->
@@ -134,7 +287,7 @@
            depth = "0.10"
            color="#1f1f1f">
         <a-image    src="#tv_still"
-                    light="color: #53A0FF; intensity: 0.4; decay: 100; type: point; castShadow: true"
+                    light="color: #53A0FF; intensity: 0.4; decay: 100; type: point; castShadow: false"
                     position = "0 0 0.06"
                     width = "3.8"
                     height = "2.1">
@@ -145,14 +298,85 @@
     <a-cylinder position="4.25 0.025 4"
                 height="0.1"
                 radius=".4"
-                color="#000000">
+                color="#000000"
+                animation="property: rotation; to: 0 0 -90; dur: 2500; easing: linear; startEvents: go;">
         <a-cylinder position="0 1.25 0"
                     height="2.5"
                     radius="0.025">
-            <a-entity mixin="light" position="0 1.65 0"></a-entity>
+            <a-entity class="dimmable" mixin="light" position="0 1.65 0"></a-entity>
         </a-cylinder>
-
     </a-cylinder>
+
+    <!-- Light Switch -->
+    <a-entity lightswitch
+                class="clickable"
+                geometry="primitive: box; height: 0.2; width: 0.2; depth: 0.2"
+                material="color: blue"
+                rotation="0 0 0"
+                position="-0.5 1.0 -1.5"
+
+                animation__float="property: position; dur: 1500; loop: true; dir:alternate; easing: linear; to: -0.5 1.1 -1.5;"
+                animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;"
+                animation__on="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; easing: linear; dur:800"
+                animation__off="property: components.material.material.color; type: color; to: blue; startEvents: mouseleave; dur:200">
+        <a-text value="Light Brightness" position="0 0.2 0" align="center" width="1.5" side="double" color="white" shader="flat"
+                animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 -360 0;">
+        </a-text>
+    </a-entity>
+
+    <!-- Color Switch -->
+    <a-entity colorswitch
+              class="clickable"
+              geometry="primitive: box; height: 0.2; width: 0.2; depth: 0.2"
+              material="color: blue"
+              rotation="0 0 0"
+              position="0 1.0 -1.5"
+
+              animation__float="property: position; dur: 1500; loop: true; dir:alternate; easing: linear; to: 0 1.1 -1.5;"
+              animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;"
+              animation__on="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; easing: linear; dur:800"
+              animation__off="property: components.material.material.color; type: color; to: blue; startEvents: mouseleave; dur:200">
+        <a-text value="Light Color" position="0 0.2 0" align="center" width="1.5" side="double" color="white" shader="flat"
+                animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 -360 0;">
+        </a-text>
+    </a-entity>
+
+    <!-- Music Switch -->
+    <a-entity musicremote
+              class="clickable"
+              geometry="primitive: box; height: 0.2; width: 0.2; depth: 0.2"
+              material="color: blue"
+              rotation="0 0 0"
+              position="0.5 1.0 -1.5"
+
+              animation__float="property: position; dur: 1500; loop: true; dir:alternate; easing: linear; to: 0.5 1.1 -1.5;"
+              animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;"
+              animation__on="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; easing: linear; dur:800"
+              animation__off="property: components.material.material.color; type: color; to: blue; startEvents: mouseleave; dur:200">
+        <a-text value="Pause/Play Music" position="0 0.2 0" align="center" width="1.5" side="double" color="white" shader="flat"
+                animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 -360 0;">
+        </a-text>
+    </a-entity>
+
+
+
+    <!-- Covid on/off switch -->
+    <a-entity covidswitch
+              class="clickable"
+              geometry="primitive: box; height: 0.3; width: 0.3; depth: 0.3"
+              material="color: gold"
+              rotation="0 0 0"
+              position="3.8 1.5 -4"
+
+              animation__float="property: position; dur: 2000; loop: true; dir:alternate; easing: linear; to: 3.8 1.6 -4;"
+              animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;"
+              animation__on="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; easing: linear; dur:800"
+              animation__off="property: components.material.material.color; type: color; to: gold; startEvents: mouseleave; dur:200">
+        <a-text value="COVID Mode" position="0 0.2 0" align="center" width="1.5" side="double" color="white" shader="flat"
+                animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 -360 0;">
+        </a-text>
+    </a-entity>
+
 
     <!-- Desk -->
     <a-box id="desk"
@@ -188,6 +412,11 @@
         </a-box>
     </a-box>
 
+    <!-- Plant -->
+    <a-entity gltf-model="#plant" scale="0.4 0.4 0.4" position="-4 0.405 4"></a-entity>
+
+    <!-- Dog -->
+    <a-entity gltf-model="#dog" scale="0.15 0.15 0.15" rotation="0 -130 0" position="-4 -0.04 -4"></a-entity>
 
 
     <!-- Picture Frame -->
@@ -210,12 +439,15 @@
     <a-entity gltf-model="#couch" light="type: point; intensity:0.1; color:white" material="color:#fff; shader:standard" scale="0.75 0.6 0.5" rotation="0 180 0" position="0 1.2 -0.7"></a-entity>
 
     <!-- Ceiling light fixture -->
-    <a-entity gltf-model="#lightfixture" light="type: point; intensity: 0.75; distance: 20; decay:5" scale="1.5 1.7 1.5" position="0 2.5 -1.5"></a-entity>
+    <a-entity class="dimmable" gltf-model="#lightfixture" light="type: point; intensity: 0.75; distance: 20; decay:5" scale="1.5 1.7 1.5" position="0 2.5 -1.5"></a-entity>
 
-    <!-- Books -->
-    <a-entity gltf-model="#book" scale="0.003 0.003 0.003" rotation="0 204 0" position="3 0.88 4.3">
-        <a-entity gltf-model="#book" scale="1 1 1" rotation="0 -10 0" position="0 22 0"></a-entity>
-    </a-entity>
+    <!-- Speakers -->
+    <a-entity class="loud" gltf-model="#speakers" scale="0.7 0.6 0.6" rotation="0 -90 0" position="-0.7 0 -4.2"
+              sound="src: #song; on: playmusic"></a-entity>
+
+
+    <!-- Book -->
+    <a-entity gltf-model="#book" scale="0.003 0.003 0.003" rotation="0 107 0" position="3 0.95 4.3"></a-entity>
 
     <!-- Computer -->
     <a-entity gltf-model="#monitor" rotation="0 180 0" position="1.85 1.5 3.85"></a-entity>
@@ -230,13 +462,25 @@
     <a-plane id="floor" position="0 0 0" rotation="-90 0 0" width="10" height="10" shadow="receive:true" src="#concretefloor"></a-plane>
 
     <!-- Sky -->
-    <a-sky src="#sky_img"
+    <a-sky id="skyimg" src="#night"
             radius="600"></a-sky>
 
 
-    <!-- Camera -->
+    <!-- Camera + Cursor -->
     <a-entity position="0 0 0">
-        <a-camera user-height="1.6"></a-camera>
+        <a-camera look-controls="pointerLockEnabled: true;" user-height="1.6">
+            <a-entity
+                    cursor="fuse: true; fuseTimeout: 1000"
+                    material="color: black; shader: flat; opacity:0.75"
+                    position="0 0 -1"
+                    geometry="primitive: sphere; radius: 0.006"
+
+                    raycaster="objects: .clickable; far: 3"
+                    animation__fusing="property: scale; startEvents: fusing; easing: linear; dur: 1000; from: 1 1 1; to: 3 3 3"
+                    animation__click="property: scale; startEvents: click; easing: linear; dur: 100; from: 3 3 3; to: 1 1 1"
+                    animation__mouseleave="property: scale; startEvents: mouseleave; to: 1 1 1; dur: 5">
+            </a-entity>
+        </a-camera>
     </a-entity>
 
 
@@ -244,6 +488,9 @@
 
     <!-- Ambient light -->
     <a-entity light="type: ambient; color: #CCC; intensity: 0.1"></a-entity>
+
+    <!-- Light from the Sun -->
+    <a-entity id="sunlight" light="type: directional; color: #FFF; intensity: 0; castShadow: true" position="10 10 -2"></a-entity>
 
 </a-scene>
 </body>
