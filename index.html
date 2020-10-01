@@ -8,6 +8,8 @@
         //making component follow user around
         const speedLimit = 5;
         speed = 0.001;
+        offset = 0;
+        direc = 1;
 
         AFRAME.registerComponent('follow', {
             schema: {
@@ -48,6 +50,17 @@
                 else {
                     speed = Math.max(speed * 0.8, 0.001);
                 }
+
+
+                // //adjust "floating"/"hovering" offset
+                // offset+=0.0001*direc;
+                //
+                // if(offset >= 0.1){
+                //     direc = -1;
+                // }
+                // else if(offset <= 0){
+                //     direc = 1;
+                // }
 
                 // determine how far we need to travel in this frame
                 var factor = speed / distance;
