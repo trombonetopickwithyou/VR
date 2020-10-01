@@ -5,6 +5,70 @@
     <script src="//unpkg.com/aframe-csg-meshs@1.0.0/index.js"></script>
 
     <script>
+        //making component follow user around
+        const speedLimit = 5;
+        speed = 0.001;
+
+        AFRAME.registerComponent('follow', {
+            schema: {
+                target: {type: 'selector'},
+                //speed: {type: 'number'}
+            },
+
+            init: function () {
+                this.directionVec3 = new THREE.Vector3();
+            },
+
+            //happens every frame
+            tick: function (time, timeDelta) {
+                var directionVec3 = this.directionVec3;
+
+                // Grab position info (vectors)
+                var targetPosition = this.data.target.object3D.position;
+                var currentPosition = this.el.object3D.position;
+
+                // Subtract to get direction we need to go
+                directionVec3.copy(targetPosition).sub(currentPosition);
+
+                // Calculate the distance.
+                var distance = directionVec3.length();
+
+                // adjust speed based on distance
+                if(distance > 5){
+                    speed = Math.min(speed*1.05, speedLimit);
+                }
+                else if(distance > 1){
+                    if(speed > 2){
+                        speed*=0.95;
+                    }
+                    else{
+                        speed*=1.05;
+                    }
+                }
+                else {
+                    speed = Math.max(speed * 0.8, 0.001);
+                }
+
+                // determine how far we need to travel in this frame
+                var factor = speed / distance;
+
+                ['x', 'y', 'z'].forEach(function (axis) {
+                    directionVec3[axis] *= factor * (timeDelta / 1000);
+                });
+
+                // Translate the entity in the direction towards the target.
+                this.el.setAttribute('position', {
+                    x: currentPosition.x + directionVec3.x,
+                    y: currentPosition.y + directionVec3.y,
+                    z: currentPosition.z + directionVec3.z
+                });
+            }
+        });
+    </script>
+
+
+
+    <script>
         // for controlling on and off of covid mode
         global_Covidmode = 1;
         AFRAME.registerComponent('covidswitch', {
@@ -41,6 +105,7 @@
 
 
     <script>
+        //for playing/stopping music at the speakers
         playing = 0;
         AFRAME.registerComponent('musicremote', {
             init: function () {
@@ -49,7 +114,8 @@
                 this.el.addEventListener('click', e => {
                     for (let piece of pieces) {
                         if (playing == 0) {
-                            piece.emit('playmusic');   //turn off covid mode
+                            piece.emit('playmusic');
+                            //entity.components.sound.playSound();
                             playing = 1;
                         } else {
                             piece.components.sound.stopSound();
@@ -60,8 +126,6 @@
             }
         })
     </script>
-
-
 
 
     <script>
@@ -93,11 +157,12 @@
         })
     </script>
 
+
     <script>
+        // for controlling light color of lamp with cube as color switch
         const colors = ['#e8c189', '#ff3030', '#ffffff', '#3075ff','#28bf37'];
         colorIndex = 0;
 
-        // for controlling light color of lamp with cube as color switch
         AFRAME.registerComponent('colorswitch', {
             init: function() {
                 //get all objects that are 'dimmable'
@@ -127,10 +192,12 @@
     </script>
 
 
-
 </head>
 <body>
 <a-scene renderer="colorManagement: true">
+
+
+
     <a-assets>
         <!-- Images -->
         <img id="tv_still" src="zoom.jpg">
@@ -154,9 +221,10 @@
         <a-asset-item id="plant" src="./models/plant/scene.gltf"></a-asset-item>
         <a-asset-item id="dog" src="./models/dog/scene.gltf"></a-asset-item>
         <a-asset-item id="speakers" src="./models/speakers/scene.gltf"></a-asset-item>
+        <a-asset-item id="balloon" src="./models/balloon/scene.gltf"></a-asset-item>
 
         <!-- Audio -->
-        <audio id="song" src="./audio/stockholm.mp3" preload="auto"></audio>
+        <audio id="song" src="./audio/rickrolled.mp3" preload="auto"></audio>
 
         <!-- Mixins -->
         <a-mixin id="wall"
@@ -176,7 +244,12 @@
         </a-mixin>
     </a-assets>
 
-    <!-- Walls  -->
+
+
+
+
+
+
     <!-- Wall 1 -->
     <a-entity position="-5 0 0"
               animation__unfold="property: rotation; to: 0 0 90; dur: 1000; easing: linear; startEvents: go; delay: 0"
@@ -266,6 +339,14 @@
     </a-entity>
     </a-entity>
 
+
+
+
+
+
+
+
+
     <!-- Mask metal sign -->
     <a-image    src="#masksign"
                 rotation="0 -90 0"
@@ -279,6 +360,23 @@
                 rotation="0 180 0"
                 position="0 2 4.85">
     </a-image>
+
+    <!-- Picture Frame -->
+    <a-entity gltf-model="#picframe" scale="0.02 0.02 0.02" rotation="0 90 90" position="-4.85 2 -0.75">
+        <a-image src="#socialdist"
+                 rotation="0 0 -90"
+                 position="0 38 0"
+                 width="1.21"
+                 height="1.82"
+                 material=""
+                 geometry=""
+                 scale="50 50 50">
+        </a-image>
+    </a-entity>
+
+
+
+
 
     <!-- TV -->
     <a-box position="0 2.5 -4.82"
@@ -294,6 +392,19 @@
         </a-image>
     </a-box>
 
+    <!-- Speakers -->
+    <a-entity class="loud" gltf-model="#speakers" scale="0.7 0.6 0.6" rotation="0 -90 0" position="-0.7 0 -4.2"
+              sound="src: #song; on: playmusic; loop:true"></a-entity>
+
+
+
+
+
+
+
+    <!-- Ceiling light fixture -->
+    <a-entity class="dimmable" gltf-model="#lightfixture" light="type: point; intensity: 0.75; distance: 20; decay:5" scale="1.5 1.7 1.5" position="0 2.5 -1.5"></a-entity>
+
     <!-- Standing Lamp -->
     <a-cylinder position="4.25 0.025 4"
                 height="0.1"
@@ -306,6 +417,11 @@
             <a-entity class="dimmable" mixin="light" position="0 1.65 0"></a-entity>
         </a-cylinder>
     </a-cylinder>
+
+
+
+
+
 
     <!-- Light Switch -->
     <a-entity lightswitch
@@ -358,8 +474,6 @@
         </a-text>
     </a-entity>
 
-
-
     <!-- Covid on/off switch -->
     <a-entity covidswitch
               class="clickable"
@@ -376,6 +490,12 @@
                 animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 -360 0;">
         </a-text>
     </a-entity>
+
+
+
+
+
+
 
 
     <!-- Desk -->
@@ -412,6 +532,21 @@
         </a-box>
     </a-box>
 
+    <!-- Book -->
+    <a-entity gltf-model="#book" scale="0.003 0.003 0.003" rotation="0 107 0" position="3 0.95 4.3"></a-entity>
+
+    <!-- Computer -->
+    <a-entity gltf-model="#monitor" rotation="0 180 0" position="1.85 1.5 3.85"></a-entity>
+
+
+
+
+
+
+
+
+
+
     <!-- Plant -->
     <a-entity gltf-model="#plant" scale="0.4 0.4 0.4" position="-4 0.405 4"></a-entity>
 
@@ -419,18 +554,9 @@
     <a-entity gltf-model="#dog" scale="0.15 0.15 0.15" rotation="0 -130 0" position="-4 -0.04 -4"></a-entity>
 
 
-    <!-- Picture Frame -->
-    <a-entity gltf-model="#picframe" scale="0.02 0.02 0.02" rotation="0 90 90" position="-4.85 2 -0.75">
-        <a-image src="#socialdist"
-                 rotation="0 0 -90"
-                 position="0 38 0"
-                 width="1.21"
-                 height="1.82"
-                 material=""
-                 geometry=""
-                 scale="50 50 50">
-        </a-image>
-    </a-entity>
+
+
+
 
     <!-- Chair -->
     <a-entity gltf-model="#chair" id="desk-chair" scale="0.04 0.03 0.04" rotation="0 -133 0" position="2 1.1 2.6"></a-entity>
@@ -438,19 +564,20 @@
     <!-- Couch -->
     <a-entity gltf-model="#couch" light="type: point; intensity:0.1; color:white" material="color:#fff; shader:standard" scale="0.75 0.6 0.5" rotation="0 180 0" position="0 1.2 -0.7"></a-entity>
 
-    <!-- Ceiling light fixture -->
-    <a-entity class="dimmable" gltf-model="#lightfixture" light="type: point; intensity: 0.75; distance: 20; decay:5" scale="1.5 1.7 1.5" position="0 2.5 -1.5"></a-entity>
-
-    <!-- Speakers -->
-    <a-entity class="loud" gltf-model="#speakers" scale="0.7 0.6 0.6" rotation="0 -90 0" position="-0.7 0 -4.2"
-              sound="src: #song; on: playmusic"></a-entity>
 
 
-    <!-- Book -->
-    <a-entity gltf-model="#book" scale="0.003 0.003 0.003" rotation="0 107 0" position="3 0.95 4.3"></a-entity>
 
-    <!-- Computer -->
-    <a-entity gltf-model="#monitor" rotation="0 180 0" position="1.85 1.5 3.85"></a-entity>
+
+
+
+
+
+
+    <!-- Hot air balloon -->
+    <a-entity follow="target:#camera; speed: 0.5" gltf-model="#balloon" rotation="0 0 0" scale="0.0014 0.0015 0.0014" position="-3.5 1.7 3.3"></a-entity>
+
+
+
 
 
 
@@ -462,13 +589,16 @@
     <a-plane id="floor" position="0 0 0" rotation="-90 0 0" width="10" height="10" shadow="receive:true" src="#concretefloor"></a-plane>
 
     <!-- Sky -->
-    <a-sky id="skyimg" src="#night"
-            radius="600"></a-sky>
+    <a-sky id="skyimg" src="#night" radius="600"></a-sky>
+
+
+
+
 
 
     <!-- Camera + Cursor -->
     <a-entity position="0 0 0">
-        <a-camera look-controls="pointerLockEnabled: true;" user-height="1.6">
+        <a-camera id="camera" look-controls="pointerLockEnabled: true;" user-height="1.6">
             <a-entity
                     cursor="fuse: true; fuseTimeout: 1000"
                     material="color: black; shader: flat; opacity:0.75"
@@ -485,11 +615,10 @@
 
 
 
-
     <!-- Ambient light -->
     <a-entity light="type: ambient; color: #CCC; intensity: 0.1"></a-entity>
 
-    <!-- Light from the Sun -->
+    <!-- Sunlight -->
     <a-entity id="sunlight" light="type: directional; color: #FFF; intensity: 0; castShadow: true" position="10 10 -2"></a-entity>
 
 </a-scene>
