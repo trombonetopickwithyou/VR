@@ -3,6 +3,53 @@
     <title>Hello World from Aframe!</title>
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="//unpkg.com/aframe-csg-meshs@1.0.0/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
+
+    <script>
+        //teleportation
+        AFRAME.registerComponent('touch-listener', {
+            init: function () {
+                var targetEl = this.el;
+
+                //Create the touchstart event
+                document.querySelector('a-scene').addEventListener('touchstart', function () {
+                    targetEl.emit('starttouch')
+                })
+
+                document.querySelector('a-scene').addEventListener('mousedown', function () {
+                    targetEl.emit('starttouch')
+                })
+
+                document.body.addEventListener('keydown', function (e) {
+                    if (e.keyCode == 32) {
+                        console.log('space key pressed!');
+                        targetEl.emit('starttouch');
+                    }
+                })
+
+                //Create the touchend event
+                document.querySelector('a-scene').addEventListener('touchend', function () {
+                    targetEl.emit('endtouch')
+                })
+
+                document.querySelector('a-scene').addEventListener('mouseup', function () {
+                    targetEl.emit('endtouch')
+                })
+
+                document.body.addEventListener('keyup', function (e) {
+                    if (e.keyCode == 32) {
+                        console.log('space key released!');
+                        targetEl.emit('endtouch');
+                    }
+                })
+
+
+            }
+        });
+
+    </script>
+
+
 
     <script>
         //making component follow user around
@@ -264,8 +311,7 @@
 
 
     <!-- Wall 1 -->
-    <a-entity position="-5 0 0"
-              animation__unfold="property: rotation; to: 0 0 90; dur: 1000; easing: linear; startEvents: go; delay: 0"
+    <a-entity position="-5 0 0" animation__unfold="property: rotation; to: 0 0 90; dur: 1000; easing: linear; startEvents: go; delay: 0"
               animation__fold="property: rotation; to: 0 0 0; dur: 6000; easing: linear; startEvents: fold;">
         <a-entity id ="wall1" class="domino" position="-0.125 2 0" rotation="0 90 0" static-body>
             <a-entity mixin="wall" csg-meshs="subtract: .window;">
@@ -599,7 +645,18 @@
     <a-plane id="roof" position="0 4 0" rotation="90 0 0" width="10" height="10" src="#concreteroof" repeat="6 6"></a-plane>
 
     <!-- Floor -->
-    <a-plane id="floor" position="0 0 0" rotation="-90 0 0" width="10" height="10" shadow="receive:true" src="#concretefloor"></a-plane>
+    <a-entity ground
+              geometry="primitive:box; width:10; depth:0.001; height:10;"
+              material="color:#333"
+              position="0 0 0"
+              rotation="-90 0 0"
+              src="#concretefloor"
+    >
+    </a-entity>
+
+    <!--
+    <a-plane ground id="floor" position="0 0 0" rotation="-90 0 0" width="10" height="10" shadow="receive:true" src="#concretefloor"></a-plane>
+    -->
 
     <!-- Sky -->
     <a-sky id="skyimg" src="#night" radius="600"></a-sky>
@@ -608,10 +665,9 @@
 
 
 
-
     <!-- Camera + Cursor -->
-    <a-entity position="0 0 0">
-        <a-camera id="camera" look-controls="pointerLockEnabled: true;" user-height="1.6">
+    <a-entity position="0 1.6 0">
+        <a-camera id="camera" position="0 0 0" universal-controls look-controls="pointerLockEnabled: true;" user-height="1.6">
             <a-entity
                     cursor="fuse: true; fuseTimeout: 1000"
                     material="color: black; shader: flat; opacity:0.75"
