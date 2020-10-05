@@ -67,6 +67,15 @@ AFRAME.registerComponent('waypoint',{
 ```
 
 ### Making balloon object follow the user
+A balloon floats at a height just above the user, and follows the user around the scene. The speed of the object varies over time, making the object's movement look more realistic.  
+
+![balloon movement](/images/balloon.gif)  
+
+A custom component named "follow" is created, and allows for the user to attach this component to any object in their environment and specify which object they would like it to follow. In this case, the object it is told to follow is the camera.  
+
+```javascript
+<a-entity follow="target:#camera" gltf-model="#balloon"></a-entity>
+```
 
 
 ### Animation: Clock
