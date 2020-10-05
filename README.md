@@ -101,12 +101,21 @@ The clock is made from scratch using A-Frame primitives. In order to make the ax
 ```
 
 ### Animation: Interactable Objects
-Boxes for:
-- Light intensity
-- Light color
-- Changing the TV's 'channel'
-- Play/Pause Music from the speakers
-- Turning on/off COVID mode
+Boxes spin and are interactable for:
+- Adjusting light intensity  
+![adjust light intensity](/images/light_box.gif)  
+
+- Adjusting light color  
+![adjust light color](/images/color_box.gif)  
+
+- Changing the TV's 'channel'  
+![change tv channel](/images/tv_remote.gif)  
+
+- Play/Pause Music from the speakers  
+(see live demo / video for example)  
+
+- Turning on/off COVID mode  
+![turn off covid move](/images/covid_mode.gif)
 
 
 ### References
