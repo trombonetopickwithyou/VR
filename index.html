@@ -3,65 +3,35 @@
     <title>Hello World from Aframe!</title>
     <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
     <script src="//unpkg.com/aframe-csg-meshs@1.0.0/index.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
 
+
+    <!-- Teleport User to Component -->
     <script>
-        //teleportation
-        AFRAME.registerComponent('touch-listener', {
-            init: function () {
-                var targetEl = this.el;
+        AFRAME.registerComponent('waypoint',{
+            init:function(data){
 
-                //Create the touchstart event
-                document.querySelector('a-scene').addEventListener('touchstart', function () {
-                    targetEl.emit('starttouch')
-                })
+                this.el.addEventListener('click',function(e){
+                    var wp_position = this.getAttribute("position");
+                    //console.log(wp_position);
 
-                document.querySelector('a-scene').addEventListener('mousedown', function () {
-                    targetEl.emit('starttouch')
-                })
+                    var camPos = document.querySelector("#camera").object3D.position;
+                    //console.log(camPos);
 
-                document.body.addEventListener('keydown', function (e) {
-                    if (e.keyCode == 32) {
-                        console.log('space key pressed!');
-                        targetEl.emit('starttouch');
-                    }
-                })
-
-                //Create the touchend event
-                document.querySelector('a-scene').addEventListener('touchend', function () {
-                    targetEl.emit('endtouch')
-                })
-
-                document.querySelector('a-scene').addEventListener('mouseup', function () {
-                    targetEl.emit('endtouch')
-                })
-
-                document.body.addEventListener('keyup', function (e) {
-                    if (e.keyCode == 32) {
-                        console.log('space key released!');
-                        targetEl.emit('endtouch');
-                    }
-                })
-
-
+                    camPos.set(wp_position.x, 1.6, wp_position.z);
+                });
             }
         });
-
     </script>
 
-
-
+    <!-- Make Balloon Follow User -->
     <script>
         //making component follow user around
-        const speedLimit = 5;
-        speed = 0.001;
-        offset = 0;
-        direc = 1;
+        const speedLimit = 1;
+        var speed = 0.001;
 
         AFRAME.registerComponent('follow', {
             schema: {
-                target: {type: 'selector'},
-                //speed: {type: 'number'}
+                target: {type: 'selector'}
             },
 
             init: function () {
@@ -86,8 +56,8 @@
                 if(distance > 5){
                     speed = Math.min(speed*1.05, speedLimit);
                 }
-                else if(distance > 1){
-                    if(speed > 2){
+                else if(distance > 2){
+                    if(speed > speedLimit*0.9){
                         speed*=0.95;
                     }
                     else{
@@ -95,19 +65,9 @@
                     }
                 }
                 else {
-                    speed = Math.max(speed * 0.8, 0.001);
+                    speed = Math.max(speed * 0.95, 0.001);
                 }
 
-
-                // //adjust "floating"/"hovering" offset
-                // offset+=0.0001*direc;
-                //
-                // if(offset >= 0.1){
-                //     direc = -1;
-                // }
-                // else if(offset <= 0){
-                //     direc = 1;
-                // }
 
                 // determine how far we need to travel in this frame
                 var factor = speed / distance;
@@ -119,15 +79,14 @@
                 // Translate the entity in the direction towards the target.
                 this.el.setAttribute('position', {
                     x: currentPosition.x + directionVec3.x,
-                    y: currentPosition.y + directionVec3.y,
+                    y: 2,
                     z: currentPosition.z + directionVec3.z
                 });
             }
         });
     </script>
 
-
-
+    <!-- On/Off COVID Mode -->
     <script>
         // for controlling on and off of covid mode
         global_Covidmode = 1;
@@ -163,7 +122,29 @@
         })
     </script>
 
+    <!-- Change TV Channel -->
+    <script>
+        // for changing the image on the TV
+        const sources = ['#tv_zoom', '#tv_cartoons','#tv_news','#tv_off'];
+        tv_index = 0;
 
+        AFRAME.registerComponent('tvremote', {
+            init: function() {
+                var tv_img = document.querySelector('#tvscreen');
+
+                this.el.addEventListener('click', e => {
+                    tv_index++;
+                    if(tv_index >= sources.length){
+                        tv_index=0;
+                    }
+
+                    tv_img.setAttribute('src', sources[tv_index]);
+                })
+            }
+        })
+    </script>
+
+    <!-- Play/Pause Music -->
     <script>
         //for playing/stopping music at the speakers
         playing = 0;
@@ -187,7 +168,7 @@
         })
     </script>
 
-
+    <!-- Change Light Intensity -->
     <script>
         // for controlling light intensity of lamp with light switch
         AFRAME.registerComponent('lightswitch', {
@@ -217,7 +198,7 @@
         })
     </script>
 
-
+    <!-- Change Light Color -->
     <script>
         // for controlling light color of lamp with cube as color switch
         const colors = ['#e8c189', '#ff3030', '#ffffff', '#3075ff','#28bf37'];
@@ -257,10 +238,13 @@
 <a-scene renderer="colorManagement: true">
 
 
-
+    <!-- Assets -->
     <a-assets>
         <!-- Images -->
-        <img id="tv_still" src="zoom.jpg">
+        <img id="tv_zoom" src="zoom.jpg">
+        <img id="tv_cartoons" src="tomjerry.jpg">
+        <img id="tv_news" src="news.jpg">
+        <img id="tv_off" src="black.jpg">
         <img id="coffeewood" src="wood1.jpg">
         <img id="concretewall" src="concrete.jpg">
         <img id="concretefloor" src="concrete_dark.jpg">
@@ -270,6 +254,7 @@
         <img id="masksign" src="mask_sign.png">
         <img id="socialdist" src="social_distancing.jpg">
         <img id="cat" src="hang_in_there.jpg">
+        <img id="teleport" src="teleport_sign.jpg">
 
         <!-- Models -->
         <a-asset-item id="couch" src="./models/couch/scene.gltf"></a-asset-item>
@@ -303,8 +288,6 @@
                  light="color: #e8c189; intensity: 0.8; distance: 35; decay: 5; type: point; castShadow: true">
         </a-mixin>
     </a-assets>
-
-
 
 
 
@@ -443,7 +426,8 @@
            height = "2.25"
            depth = "0.10"
            color="#1f1f1f">
-        <a-image    src="#tv_still"
+        <a-image    id="tvscreen"
+                    src="#tv_zoom"
                     light="color: #53A0FF; intensity: 0.4; decay: 100; type: point; castShadow: false"
                     position = "0 0 0.06"
                     width = "3.8"
@@ -452,7 +436,7 @@
     </a-box>
 
     <!-- Speakers -->
-    <a-entity class="loud" gltf-model="#speakers" scale="0.7 0.6 0.6" rotation="0 -90 0" position="-0.7 0 -4.2"
+    <a-entity checkpoint class="loud" gltf-model="#speakers" scale="0.7 0.6 0.6" rotation="0 -90 0" position="-0.7 0 -4.2"
               sound="src: #song; on: playmusic; loop:true"></a-entity>
 
 
@@ -480,10 +464,10 @@
 
 
 
-
+    <!-- INTERACTABLES -->
 
     <!-- Light Switch -->
-    <a-entity lightswitch
+    <a-entity   lightswitch
                 class="clickable"
                 geometry="primitive: box; height: 0.2; width: 0.2; depth: 0.2"
                 material="color: blue"
@@ -516,8 +500,8 @@
         </a-text>
     </a-entity>
 
-    <!-- Music Switch -->
-    <a-entity musicremote
+    <!-- TV Switch -->
+    <a-entity tvremote
               class="clickable"
               geometry="primitive: box; height: 0.2; width: 0.2; depth: 0.2"
               material="color: blue"
@@ -525,6 +509,26 @@
               position="0.5 1.0 -1.5"
 
               animation__float="property: position; dur: 1500; loop: true; dir:alternate; easing: linear; to: 0.5 1.1 -1.5;"
+              animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;"
+              animation__on="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; easing: linear; dur:800"
+              animation__off="property: components.material.material.color; type: color; to: blue; startEvents: mouseleave; dur:200">
+        <a-text value="TV Channel" position="0 0.2 0" align="center" width="1.5" side="double" color="white" shader="flat"
+                animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 -360 0;">
+        </a-text>
+    </a-entity>
+
+
+
+
+    <!-- Music Switch -->
+    <a-entity musicremote
+              class="clickable"
+              geometry="primitive: box; height: 0.25; width: 0.25; depth: 0.25"
+              material="color: blue"
+              rotation="0 0 0"
+              position="-0.9 1.2 -4.1"
+
+              animation__float="property: position; dur: 1500; loop: true; dir:alternate; easing: linear; to: -0.9 1.3 -4.1;"
               animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;"
               animation__on="property: components.material.material.color; type: color; to: red; startEvents: mouseenter; easing: linear; dur:800"
               animation__off="property: components.material.material.color; type: color; to: blue; startEvents: mouseleave; dur:200">
@@ -550,7 +554,50 @@
         </a-text>
     </a-entity>
 
+    <!-- Teloporting Swithes -->
+    <a-box class="clickable"
+           position="0 1.7 0"
+           depth="0.5"
+           height="0.5"
+           width="0.5"
+           waypoint
+           src="#teleport"
+           animation__float="property: position; dur: 2000; loop: true; dir:alternate; easing: linear; to: 0 1.8 0"
+           animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;">
+    </a-box>
 
+    <a-box class="clickable"
+           position="-2.6 1.7 -3"
+           depth="0.5"
+           height="0.5"
+           width="0.5"
+           waypoint
+           src="#teleport"
+           animation__float="property: position; dur: 2000; loop: true; dir:alternate; easing: linear; to: -2.6 1.8 -3;"
+           animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;">
+    </a-box>
+
+    <a-box class="clickable"
+           position="3 2.2 0"
+           depth="0.5"
+           height="0.5"
+           width="0.5"
+           waypoint
+           src="#teleport"
+           animation__float="property: position; dur: 2000; loop: true; dir:alternate; easing: linear; to: 3 2.3 0;"
+           animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;">
+    </a-box>
+
+    <a-box class="clickable"
+           position="-2.6 1.7 3.2"
+           depth="0.5"
+           height="0.5"
+           width="0.5"
+           waypoint
+           src="#teleport"
+           animation__float="property: position; dur: 2000; loop: true; dir:alternate; easing: linear; to: -2.6 1.8 3.2;"
+           animation__spin="property: rotation; dur: 10000; loop: true; easing: linear; to: 0 360 0;">
+    </a-box>
 
 
 
@@ -644,19 +691,9 @@
     <!-- Roof -->
     <a-plane id="roof" position="0 4 0" rotation="90 0 0" width="10" height="10" src="#concreteroof" repeat="6 6"></a-plane>
 
-    <!-- Floor -->
-    <a-entity ground
-              geometry="primitive:box; width:10; depth:0.001; height:10;"
-              material="color:#333"
-              position="0 0 0"
-              rotation="-90 0 0"
-              src="#concretefloor"
-    >
-    </a-entity>
 
-    <!--
+    <!-- Floor -->
     <a-plane ground id="floor" position="0 0 0" rotation="-90 0 0" width="10" height="10" shadow="receive:true" src="#concretefloor"></a-plane>
-    -->
 
     <!-- Sky -->
     <a-sky id="skyimg" src="#night" radius="600"></a-sky>
@@ -665,9 +702,13 @@
 
 
 
+
     <!-- Camera + Cursor -->
-    <a-entity position="0 1.6 0">
-        <a-camera id="camera" position="0 0 0" universal-controls look-controls="pointerLockEnabled: true;" user-height="1.6">
+    <a-entity id="cameraRig" position="0 0 0">
+        <a-camera id="camera"
+                  look-controls="pointerLockEnabled: true"
+                  wasd-controls
+                  user-height="1.6">
             <a-entity
                     cursor="fuse: true; fuseTimeout: 1000"
                     material="color: black; shader: flat; opacity:0.75"
