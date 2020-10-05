@@ -78,15 +78,35 @@ A custom component named "follow" is created, and allows for the user to attach 
 ```
 
 
-### Animation: Clock
+### Clock
+![clock](/images/clock.gif)  
 
+The clock is made from scratch using A-Frame primitives. In order to make the axis of rotation be the end of the shape instead of the center of the shape, the object is wrapped in a second entity (located in the center of the clock, and rotating around its center), and each hand is positioned in the environment relative to the wrapper.  
+
+```javascript
+<!-- Clock -->
+<a-cylinder position="3.5 2.5 0.05" height="0.05" radius="0.5" rotation="90 0 0" color="white">
+    <!-- First hand -->
+    <a-entity position="0 0.05 0"
+                animation="property: rotation; to:0 -360 0; dur:100000; easing: linear; loop:true">
+        <a-box position="0.15 0 0" width="0.35" height="0.01" depth="0.05" color="black"></a-box>
+    </a-entity>
+    <!-- Second Hand -->
+    <a-entity position="0 0.05 0"
+              animation="property: rotation; to:0 -360 0; dur:10000; easing: linear; loop:true">
+        <a-box position="0.2 0 0" width="0.45" height="0.01" depth="0.05" color="black"></a-box>
+    </a-entity>
+</a-cylinder>
+
+```
 
 ### Animation: Interactable Objects
-- Box for light intensity
-- Box for light color
-- Changing the TV 'channel'
+Boxes for:
+- Light intensity
+- Light color
+- Changing the TV's 'channel'
 - Play/Pause Music from the speakers
-- Turn on/off COVID mode
+- Turning on/off COVID mode
 
 
 ### References
