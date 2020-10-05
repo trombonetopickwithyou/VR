@@ -8,11 +8,11 @@ The VR environment must include objects and be decorated in some kind of a consi
 
 
 
-#### Click the image below to watch a short video demo.
-[![ScreenShot](/screenshot/p1.BhaktaMayur.jpg)](https://www.youtube.com/watch?v=uLcRlKjseq8&feature=youtu.be)
+#### Click the image below to watch a brief video demo.
+[![Screenshot from Demo Video](/images/demo_screenshot.jpg)](https://www.youtube.com/watch?v=uLcRlKjseq8&feature=youtu.be)
 
-#### Click the link below to try it for yourself.
-https://mbhakta95.github.io/Virtual-Reality/Project1/Project1.html
+#### Click the link below to try it for yourself (live demo).
+https://trombonetopickwithyou.github.io/VR
 
 
 
@@ -21,7 +21,7 @@ https://mbhakta95.github.io/Virtual-Reality/Project1/Project1.html
 - A-Frame [1.0.4](https://aframe.io)
 - A-Frame csg-meshs [1.0.0](https://github.com/SebastianBaltes/aframe-csg-meshs)  
   
-  This application is written in HTML and JavaScript, using the A-Frame framework.  
+This application is written in HTML and JavaScript, using the A-Frame framework.  
 
 # Some notable aspects of this program
 
