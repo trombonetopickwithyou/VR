@@ -9,7 +9,7 @@ The VR environment must include objects and be decorated in some kind of a consi
 
 
 #### Click the image below to watch a brief video demo.
-[![Link to Demo Video](/images/p1.williams.gif)](https://www.youtube.com/watch?v=uLcRlKjseq8&feature=youtu.be)
+[![Link to Demo Video](/images/p1.williams.gif)](https://youtu.be/7pK0n02emos)
 
 #### Click the link below to try it for yourself (live demo).
 https://trombonetopickwithyou.github.io/VR
