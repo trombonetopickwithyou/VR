@@ -118,13 +118,42 @@ Boxes spin and are interactable for:
 ![turn off covid move](/images/covid_mode.gif)
 
 
-## References
+# References
 
-#### Models
+#### Models  
+
+There are ~17 different objects in this VR scene, 10 of which are pulled from other sources:  
+- "couch" - https://sketchfab.com/3d-models/couch-low-poly-88aa89d84e1441a8927c09164d18275d  
+- "lightfixture" - https://sketchfab.com/3d-models/light-fixture-bae2e5cae1a24655a9223c1a82d7921f  
+- "book" - https://sketchfab.com/3d-models/book-low-poly-d6465435cb3241f9a550067e34c28918  
+- "monitor" - https://sketchfab.com/3d-models/desktop-computer-561abc2fc95941609fc7bc6f232895c2  
+- "chair" - https://sketchfab.com/3d-models/simple-low-poly-office-chair-f27a1912734943aab7521adf1fe6fa51
+- "picframe" - https://sketchfab.com/3d-models/picture-frame-in-african-style-72ece6bbf86d45faaf0f6d02d1788262
+- "plant" - https://sketchfab.com/3d-models/low-poly-plant-9b1916457ab74e98a4e9124e637390fd  
+- "dog" - https://sketchfab.com/3d-models/low-poly-doggy-1c8c763518ab4751bfcddf0b6a34011a  
+- "speakers" - https://sketchfab.com/3d-models/speakers-low-poly-b2e3d6ecef4e40d994066416c395bf0a  
+- "balloon" - https://sketchfab.com/3d-models/low-poly-hot-air-balloon-3eff436e33ce4db3a54d4d8edc43528b  
+
 
 #### Textures
+- "tv_zoom" - https://ca-times.brightspotcdn.com/dims4/default/7f069ce/2147483647/strip/true/crop/2808x1607+0+0/resize/840x481!/quality/90/?url=https%3A%2F%2Fcalifornia-times-brightspot.s3.amazonaws.com%2F22%2F94%2Fdcba53814c47b09bc8d84b43cc0f%2Fartist-relief-fund.jpg  
+- "tv_cartoons" - https://www.bbc.com/news/world-us-canada-51357832  
+- "tv_news" - https://www.nytimes.com/2020/03/24/business/media/coronavirus-evening-news.html  
+- "tv_off" - https://colourlex.com/project/peach-stone-black/  
+- "coffeewood" - https://www.wonderwoodstore.nl/en/stolle-t46-coffee-table.html  
+- "concretewall" - https://www.pinterest.com/pin/510525307748609205/?nic_v2=1a7MtPd3O  
+- "concretefloor" - https://eyehortilux.com/grow-lights/blue-metal-halide/concrete-texture/  
+- "concreteroof" - https://www.publicdomainpictures.net/en/view-image.php?image=280995&picture=gray-concrete-texture  
+- "night" - http://sjastronomy.ca/introduction-360-nighttime-panoramic-photography/
+- "day" - https://www.shutterstock.com/search/360+panorama
+- "masksign" - https://www.customsigns.com/notice-please-wear-a-face-mask-sign  
+- "socialdist" - https://www.minutemanpress.com/products-services/product-gallery/free-downloadable-social-distancing-signs-now-available.html
+- "cat" - https://www.amazon.com/Hang-There-Cat-Poster-Motivational/dp/B073FKH276
+- "teleport" - https://www.shutterstock.com/search/teleport+logo  
+
 
 #### Misc.
 - https://aframe.io/
 - https://www.youtube.com/playlist?list=PL8MkBHej75fJD-HveDzm4xKrciC5VfYuV
 - https://alex-nguyen.github.io/CS5331001-Virtual-Reality/index.html
+- https://www.youtube.com/watch?v=dQw4w9WgXcQ
