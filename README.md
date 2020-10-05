@@ -118,13 +118,40 @@ Boxes spin and are interactable for:
 ![turn off covid move](/images/covid_mode.gif)
 
 
-## References
+# References
 
 #### Models
+"couch" -
+"lightfixture" -
+"book" -
+"monitor" -
+"chair" -
+"picframe" -
+"plant" -
+"dog" -
+"speakers" -
+"balloon" -
+
 
 #### Textures
+- "tv_zoom" -
+- "tv_cartoons" -
+- "tv_news" -
+- "tv_off" -
+- "coffeewood" -
+- "concretewall" -
+- "concretefloor" -
+- "concreteroof" -
+- "night" -
+- "day" -
+- "masksign" -
+- "socialdist" -
+- "cat" -
+- "teleport" -
+
 
 #### Misc.
 - https://aframe.io/
 - https://www.youtube.com/playlist?list=PL8MkBHej75fJD-HveDzm4xKrciC5VfYuV
 - https://alex-nguyen.github.io/CS5331001-Virtual-Reality/index.html
+- https://www.youtube.com/watch?v=dQw4w9WgXcQ
