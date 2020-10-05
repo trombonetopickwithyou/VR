@@ -23,12 +23,20 @@ https://trombonetopickwithyou.github.io/VR
   
 This application is written in HTML and JavaScript, using the A-Frame framework.  
 
+
+
+
+
+
+
 # Some notable aspects of this program
 
 ### Walls and Barred Windows
 The walls are designed to be "prison-like," portraying how COVID-19 has, in many ways, imprisoned us in our own homes.  
+
 ![barred windows](/images/barred_windows.JPG)  
-The windows are cut into the walls using the A-Frame csg-meshs component developed by SebastianBaltes. This component allows for "boolean mesh operations" on constructive geometry.
+
+The bars on the windows are made out of cyliders placed flush outside of the wall. The windows cut into the walls use the A-Frame csg-meshs component. This component allows for "boolean mesh operations" on constructive geometry.
 
 ```javascript
 <a-entity mixin="wall" csg-meshs="subtract: .window;">
@@ -37,9 +45,28 @@ The windows are cut into the walls using the A-Frame csg-meshs component develop
 ```
   
 ### Navigating the Space
+To navigate the space, WASD can be used if viewing from a computer. Additionally, there are floating "teloport here" blocks located among the scene, which allow the user to teleport to a specific spot by gazing at the respective block long enough.  
 
+![teleport here block](/images/teleport.gif)  
 
-### Creating an object that follows you
+The blocks are assigned a custom component "waypoint" and the respective javascript registering that component allows for a specific set of actions to occur every time a "waypoint" is clicked.
+```javascript
+AFRAME.registerComponent('waypoint',{
+  init:function(data){
+
+      this.el.addEventListener('click',function(e){
+          //get position of waypoint block. get user camera info
+          var wp_position = this.getAttribute("position");
+          var camPos = document.querySelector("#camera").object3D.position;
+
+          //set camera position
+          camPos.set(wp_position.x, 1.6, wp_position.z);
+      });
+  }
+});
+```
+
+### Making balloon object follow the user
 
 
 ### Animation: Clock
