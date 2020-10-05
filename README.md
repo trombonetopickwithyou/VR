@@ -9,7 +9,7 @@ The VR environment must include objects and be decorated in some kind of a consi
 
 
 #### Click the image below to watch a brief video demo.
-[![Link to Demo Video](/images/demo_screenshot.JPG)](https://www.youtube.com/watch?v=uLcRlKjseq8&feature=youtu.be)
+[![Link to Demo Video](/images/p1.williams.gif)](https://www.youtube.com/watch?v=uLcRlKjseq8&feature=youtu.be)
 
 #### Click the link below to try it for yourself (live demo).
 https://trombonetopickwithyou.github.io/VR
@@ -118,18 +118,13 @@ Boxes spin and are interactable for:
 ![turn off covid move](/images/covid_mode.gif)
 
 
-### References
+## References
 
 #### Models
 
 #### Textures
 
-
-
-
-
-
-## References
+#### Misc.
 - https://aframe.io/
 - https://www.youtube.com/playlist?list=PL8MkBHej75fJD-HveDzm4xKrciC5VfYuV
 - https://alex-nguyen.github.io/CS5331001-Virtual-Reality/index.html
