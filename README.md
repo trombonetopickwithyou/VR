@@ -132,4 +132,4 @@ Boxes spin and are interactable for:
 ## References
 - https://aframe.io/
 - https://www.youtube.com/playlist?list=PL8MkBHej75fJD-HveDzm4xKrciC5VfYuV
-
+- https://alex-nguyen.github.io/CS5331001-Virtual-Reality/index.html
