@@ -2,14 +2,15 @@
 #
 # Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
 #
-*/[Ll]ibrary/
-*/[Tt]emp/
-*/[Oo]bj/
-*/[Bb]uild/
-*/[Bb]uilds/
-*/[Ll]ogs/
-*/[Uu]ser[Ss]ettings/
-*/Artifacts/
+P02/unityTests/Maze Generator/Test_MazeGenerator/Library/*
+P02/unityTests/Maze Generator/Test_MazeGenerator/Logs/*
+P02/unityTests/Maze Generator/Test_MazeGenerator/Temp/*
+P02/unityTests/Maze Generator/Test_MazeGenerator/Obj/*
+P02/unityTests/Maze Generator/Test_MazeGenerator/Build/*
+P02/unityTests/Maze Generator/Test_MazeGenerator/Builds/*
+
+P02/unityTests/Maze Generator/Test_MazeGenerator/UserSettings/*
+P02/unityTests/Maze Generator/Test_MazeGenerator/Artifacts/*
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data
@@ -70,4 +71,4 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-P02/unityTests/Maze Generator/Test_MazeGenerator/Library/Artifacts/00/0088bcf454985deff586d710d85f24f9
+P02/unityTests/Maze Generator/Test_MazeGenerator/Library/Artifacts/*
